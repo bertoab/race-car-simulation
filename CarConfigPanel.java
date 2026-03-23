@@ -15,6 +15,11 @@ public class CarConfigPanel extends JPanel implements ActionListener {
     }
 
     @Override
+    public Dimension getMaximumSize() {
+        return new Dimension(super.getMaximumSize().width, getPreferredSize().height);
+    }
+
+    @Override
     public void actionPerformed(ActionEvent e) {
         Container parent = getParent(); 
         parent.remove(this);

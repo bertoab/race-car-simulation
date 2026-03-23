@@ -37,7 +37,7 @@ public class Menu extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("add_car")) {
             CarConfigPanel carPanel = new CarConfigPanel();
-            carsPane.add(new CarConfigPanel());
+            carsPane.add(carPanel);
             carsPane.revalidate();
         }
     }
