@@ -7,9 +7,9 @@ import java.io.*;
 
 public class MapPanel extends JPanel {
 
-    Image mapImage;
-    final double[] xRatios;
-    final double[] yRatios;
+    private Image mapImage;
+    private final double[] xRatios;
+    private final double[] yRatios;
 
     public MapPanel() {
         setLayout(null);

@@ -6,7 +6,7 @@ import java.awt.event.*;
 
 public class Menu extends JPanel implements ActionListener {
 
-    Box carsPane;
+    private Box carsPane;
 
     public Menu() {
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
