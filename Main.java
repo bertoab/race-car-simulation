@@ -19,7 +19,7 @@ public class Main {
 
         MapPanel map = new MapPanel(new File("map.png"), xRatios, yRatios);
 
-        Menu menu = new Menu();
+        Menu menu = new Menu(map);
 
         frame.add(map);
         frame.add(menu, BorderLayout.EAST);

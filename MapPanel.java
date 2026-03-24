@@ -39,6 +39,7 @@ public class MapPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         //draw the image to match the size of the map panel
         g.drawImage(mapImage.getScaledInstance(getWidth(), getHeight(), Image.SCALE_DEFAULT), 0, 0, null);
     }

@@ -3,12 +3,20 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Random;
 
 public class Menu extends JPanel implements ActionListener {
 
     private Box carsPane;
+    private MapPanel mapPanel;
 
     public Menu() {
+        this(null);
+    }
+
+    public Menu(MapPanel mapPanel) {
+        this.mapPanel = mapPanel;
+
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(200, 1));
@@ -36,7 +44,15 @@ public class Menu extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("add_car")) {
-            CarConfigPanel carPanel = new CarConfigPanel();
+            //FIXME: placeholder testing code
+            Random randGen = new Random();
+
+            //FIXME: eventually replace this statement with an arraylist
+            CarComponent mapCar = new CarComponent();
+
+            mapPanel.add(mapCar);
+            mapCar.setLocation(randGen.nextInt(mapPanel.getWidth()), randGen.nextInt(mapPanel.getHeight()));
+            CarConfigPanel carPanel = new CarConfigPanel(mapCar);
             carsPane.add(carPanel);
             carsPane.revalidate();
         }

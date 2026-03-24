@@ -6,7 +6,11 @@ import java.awt.event.*;
 
 public class CarConfigPanel extends JPanel implements ActionListener {
     
-    public CarConfigPanel() {
+    private CarComponent carComponent;
+
+    public CarConfigPanel(CarComponent c) {
+        carComponent = c;
+
         setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
         add(new JTextField("placeholder"));
         JButton removeButton = new JButton("X");
@@ -25,5 +29,10 @@ public class CarConfigPanel extends JPanel implements ActionListener {
         parent.remove(this);
         parent.revalidate();
         parent.repaint();
+        
+        Container map = carComponent.getParent();
+        map.remove(carComponent);
+        map.revalidate();
+        map.repaint();
     }
 }
