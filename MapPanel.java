@@ -8,8 +8,19 @@ import java.io.*;
 public class MapPanel extends JPanel {
 
     Image mapImage;
+    final double[] xRatios;
+    final double[] yRatios;
 
-    public MapPanel(File f) {
+    public MapPanel() {
+        setLayout(null);
+        xRatios = null;
+        yRatios = null;
+    }
+
+    public MapPanel(File f,  double[] xRatios, double[] yRatios) {
+        this.xRatios = xRatios;
+        this.yRatios = yRatios;
+
         //remove layout manager so that CarComponent coordinates can be set manually
         setLayout(null);
 
@@ -20,6 +31,10 @@ public class MapPanel extends JPanel {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Point getLocationCoords(int locationIndex) {
+        return new Point((int)(xRatios[locationIndex] * getWidth()), (int)(yRatios[locationIndex] * getHeight()));
     }
 
     @Override
