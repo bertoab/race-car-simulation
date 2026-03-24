@@ -36,7 +36,7 @@ public class Car {
     }
 
     public void setSpeed(double speed) {
-        this.speed = Math.max(0.0, speed);
+        this.speed = Math.clamp(speed, 0.0, MAX_SPEED);
     }
 
     public double getPosition() {
@@ -95,4 +95,11 @@ public class Car {
     public void removeEffect(StatusEffect statusEffect) {
         statusEffects.remove(statusEffect);
     }
+
+    @Override
+    public String toString() {
+        return "Car (" + name + ")";
+    }
+
+    public static final double MAX_SPEED = 60;
 }
