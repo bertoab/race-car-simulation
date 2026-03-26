@@ -54,6 +54,16 @@ public class Menu extends JPanel implements ActionListener {
         //bottom pane
         JPanel bottom = new JPanel();
 
+        JButton runRaceButton = new JButton("Run Race");
+        runRaceButton.setActionCommand("run_race");
+        runRaceButton.addActionListener(this);
+        bottom.add(runRaceButton);
+
+        JButton resetButton = new JButton("Reset");
+        resetButton.setActionCommand("reset");
+        resetButton.addActionListener(this);
+        bottom.add(resetButton);
+
         //car pane section
         carsPane = new Box(BoxLayout.Y_AXIS);
         JScrollPane carsScroll = new JScrollPane(carsPane);
