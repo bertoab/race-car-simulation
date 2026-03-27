@@ -14,8 +14,8 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //FIXME: placeholders
-        double[] xRatios = {0.5, 0.8, 0.3};
-        double[] yRatios = {0.3, 0.6, 0.6};
+        double[] xRatios = {0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
+        double[] yRatios = {0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
 
         MapPanel map = new MapPanel(new File("map.png"), xRatios, yRatios);
 
