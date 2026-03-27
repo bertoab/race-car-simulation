@@ -23,6 +23,7 @@ public class Menu extends JPanel implements ActionListener {
      */
     private ArrayList<Car> cars;
     private HashSet<Integer> carStartTracks;
+    private boolean isRaceRunning = false;
 
     public Menu() {
         this(null);
@@ -32,11 +33,6 @@ public class Menu extends JPanel implements ActionListener {
         this.mapPanel = mapPanel;
         cars = new ArrayList<Car>();
         carStartTracks = new HashSet<Integer>();
-
-        // do Model stuff: create initial Cars Array
-        for (int i = 0; i < INITIAL_NUM_CARS; i++) {
-            cars.add(createRandomizedCar());
-        }
 
         // styling
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
@@ -49,7 +45,6 @@ public class Menu extends JPanel implements ActionListener {
         addCarButton.setActionCommand("add_car");
         addCarButton.addActionListener(this);
         top.add(addCarButton);
-
 
         //bottom pane
         JPanel bottom = new JPanel();
@@ -72,54 +67,96 @@ public class Menu extends JPanel implements ActionListener {
         add(top, BorderLayout.NORTH);
         add(carsScroll);
         add(bottom, BorderLayout.SOUTH);
+
+        for (int i = 0; i < INITIAL_NUM_CARS; i++) {
+            addConfigPanel();
+        }
+    }
+
+    private void addConfigPanel() {
+        try {
+            int carCount = carsPane.getComponentCount() + 1;
+            if (carCount >= TOTAL_TRACKS) {
+                String message = String.format("Cannot add more than %d cars.\n", TOTAL_TRACKS);
+                throw new IllegalStateException(message);
+            }
+
+            CarConfigPanel carPanel = new CarConfigPanel(String.format("Car %d", carCount));
+            carsPane.add(carPanel);
+            carsPane.revalidate();
+        } catch (RuntimeException exception) {
+            JOptionPane.showMessageDialog(null, exception.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void resetRace() {
+        isRaceRunning = false;
+        cars.clear();
+        mapPanel.removeAll();
+        mapPanel.repaint();
+
+        for (Component comp : carsPane.getComponents()) {
+            if (comp instanceof CarConfigPanel configPanel) {
+                configPanel.setReadOnly(false);
+            }
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
         if (action.equals("add_car")) {
-            try {
-                Car newCar = createRandomizedCar();
-                cars.add(newCar);
-                //FIXME: uncomment when method exists in MapPanel
-                //mapPanel.update(cars);
-                //FIXME: placeholder testing code
+            addConfigPanel();
+        } else if (action.equals("run_race")) {
+            if (isRaceRunning) {
+                return;
+            }
 
+            try {
+                cars.clear();
+                mapPanel.removeAll();
                 Random randGen = new Random();
 
-                //FIXME: eventually replace this statement with an arraylist
-                CarComponent mapCar = new CarComponent();
+                int carIndex = 0;
+                for (Component comp : carsPane.getComponents()) {
+                    if (comp instanceof CarConfigPanel configPanel) {
+                        if (carIndex >= TOTAL_TRACKS) {
+                            String message = String.format("Cannot add more than %d cars.\n", TOTAL_TRACKS);
+                            throw new IllegalStateException(message);
+                        }
 
-                mapPanel.add(mapCar);
-                mapCar.setLocation(randGen.nextInt(mapPanel.getWidth()), randGen.nextInt(mapPanel.getHeight()));
+                        configPanel.setReadOnly(true);
 
-                CarConfigPanel carPanel = new CarConfigPanel(mapCar);
-                carsPane.add(carPanel);
-                carsPane.revalidate();
-            } catch (IllegalStateException exception) {
-              String message = String.format("Cannot add more than %d cars.\n", TOTAL_TRACKS);
-              String title = "Error";
-               JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
+                        Car car = configPanel.makeCar(carIndex, TOTAL_TRACKS);
+                        cars.add(car);
+
+                        //FIXME: eventually replace this statement with an arraylist
+                        CarComponent mapCar = new CarComponent();
+
+                        mapPanel.add(mapCar);
+                        mapCar.setLocation(randGen.nextInt(mapPanel.getWidth()), randGen.nextInt(mapPanel.getHeight()));
+
+                        carIndex++;
+                    }
+                }
+
+                if (carIndex < 2) {
+                    throw new IllegalStateException("Need at least 2 cars to start the race!");
+                }
+
+                mapPanel.repaint();
+                isRaceRunning = true;
+            } catch (RuntimeException exception) {
+                resetRace();
+
+                JOptionPane.showMessageDialog(null, exception.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
+
+            // TODO: actually run the race
+        } else if (action.equals("reset")) {
+            resetRace();
         }
-    }
-
-    private Car createRandomizedCar() {
-        int totalTracks = LAST_TRACK_INDEX + 1;
-        // ensures every car starts and stops on a different stop
-        if (cars.size() >= totalTracks)
-           throw new IllegalStateException("Maximum number of Cars for RaceTrack");
-
-        String name = String.format("Car %d", cars.size() + 1);
-
-        Random randGen = new Random();
-        int startTrackIndex = randGen.nextInt(TOTAL_TRACKS);
-        while (carStartTracks.contains(startTrackIndex))
-          startTrackIndex = randGen.nextInt(TOTAL_TRACKS);
-        carStartTracks.add(startTrackIndex);
-
-        int goalTrackIndex = (startTrackIndex + LAST_TRACK_INDEX) % totalTracks; //FIXME
-
-        return new Car(name, startTrackIndex, goalTrackIndex, totalTracks);
     }
 }
