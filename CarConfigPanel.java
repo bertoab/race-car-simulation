@@ -1,12 +1,9 @@
 //Lior Sapir, Joshua Staub
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.*;
-import java.text.NumberFormat;
+import java.util.Random;
 
 public class CarConfigPanel extends JPanel implements ActionListener {
     private final JTextField nameField;
@@ -14,7 +11,7 @@ public class CarConfigPanel extends JPanel implements ActionListener {
     private final JButton removeButton;
     private boolean readOnly = false;
 
-    public CarConfigPanel() {
+    public CarConfigPanel(String defaultName) {
         setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
         setLayout(new GridBagLayout());
 
@@ -56,6 +53,10 @@ public class CarConfigPanel extends JPanel implements ActionListener {
         removeButton.setActionCommand("remove");
         removeButton.addActionListener(this);
         add(removeButton, c);
+
+        Random rand = new Random();
+        speedField.setCurValue(rand.nextInt(0, (int) Car.MAX_SPEED + 1));
+        nameField.setText(defaultName);
     }
 
     public void setReadOnly(boolean readOnly) {
