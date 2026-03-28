@@ -9,7 +9,7 @@ import java.util.List;
 
 public class RaceTrack {
     private double[] trackSections; // track section lengths
-    private ArrayList<Car> cars; // cars in the race
+    private final ArrayList<Car> cars; // cars in the race
 
     // default constructor
     public RaceTrack() {

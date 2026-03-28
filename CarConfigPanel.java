@@ -86,8 +86,8 @@ public class CarConfigPanel extends JPanel implements ActionListener {
         }
     }
 
-    public Car makeCar(int goalTrack, int totalTracks) {
-        Car car = new Car(nameField.getText(), (goalTrack + 1) % totalTracks, goalTrack, totalTracks);
+    public Car makeCar(int startTrack, int totalTracks) {
+        Car car = new Car(nameField.getText(), startTrack, Math.floorMod(startTrack - 1, totalTracks), totalTracks);
 
         car.setSpeed(speedField.getCurValue());
         return car;

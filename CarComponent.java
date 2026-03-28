@@ -16,6 +16,15 @@ public class CarComponent extends JPanel {
     }
 
     @Override
+    public void setLocation(Point position) {
+        position = (Point) position.clone();
+
+        position.x -= CIRCLE_SIZE / 2;
+        position.y -= CIRCLE_SIZE / 2;
+        super.setLocation(position);
+    }
+
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 

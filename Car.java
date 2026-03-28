@@ -59,7 +59,7 @@ public class Car {
 
             // Avoid overshooting the goal track
             int tracksRemaining = Math.floorMod(goalTrackIndex - currentTrackIndex, totalTracks);
-            if (tracksRemaining < trackIncrement) {
+            if (tracksRemaining <= trackIncrement) {
                 this.currentTrackIndex = goalTrackIndex;
                 this.positionInTrackSection = 0.0;
             } else {

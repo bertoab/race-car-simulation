@@ -4,14 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Menu extends JPanel implements ActionListener {
     private static final int INITIAL_NUM_CARS = 6;
     // FIXME: this belongs in RaceTrack, as something like RaceTrack.getTrackCount()
     private static final int TOTAL_TRACKS = 10;
-    private static double STEP_TIME = 1.0;
+    private static final double STEP_TIME = 1.0;
 
     private final Box carsPane;
     private final MapPanel mapPanel;

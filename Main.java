@@ -13,9 +13,9 @@ public class Main {
         frame.setSize(WINDOW_DIMENSION);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //FIXME: placeholders
-        double[] xRatios = {0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
-        double[] yRatios = {0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
+        //TODO: move into config file, calculate from pixel coordinates instead of hardcoding
+        double[] xRatios = {0.7052, 0.7104, 0.4592, 0.4417, 0.2865, 0.3969, 0.3417, 0.5573, 0.8031, 0.825};
+        double[] yRatios = {0.4681, 0.2042, 0.0792, 0.2431, 0.2806, 0.4569, 0.8403, 0.6708, 0.7236, 0.525};
 
         MapPanel map = new MapPanel(new File("map.png"), xRatios, yRatios);
 
