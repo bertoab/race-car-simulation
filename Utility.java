@@ -8,4 +8,10 @@ public class Utility {
     public static Point lerp(Point p1, Point p2, double t) {
         return new Point(floorInt(p1.x + t * (p2.x - p1.x)), floorInt(p1.y + t * (p2.y - p1.y)));
     }
+
+    public static double secondsElapsed() {
+        return (double) System.nanoTime() / (double) NANOS_TO_S;
+    }
+
+    private static final long NANOS_TO_S = 1_000_000_000;
 }

@@ -10,7 +10,7 @@ public class Menu extends JPanel implements ActionListener {
     private static final int INITIAL_NUM_CARS = 6;
     // FIXME: this belongs in RaceTrack, as something like RaceTrack.getTrackCount()
     private static final int TOTAL_TRACKS = 10;
-    private static final double STEP_TIME = 1.0;
+    private static final double STEP_TIME = 1.0 / 30.0;
 
     private final Box carsPane;
     private final MapPanel mapPanel;
@@ -19,6 +19,8 @@ public class Menu extends JPanel implements ActionListener {
     // TODO: is this the best way to do this? wouldn't it be better for each CarComponent to just store a reference to its corresponding Car?
     private final HashMap<Car, CarComponent> carComponents;
     private boolean isRaceRunning = false;
+    private final Timer timer;
+    private double lastTime = 0;
 
     public Menu() {
         this(null);
@@ -34,6 +36,8 @@ public class Menu extends JPanel implements ActionListener {
         // TODO: add leaderboard component to view when complete
         this.leaderBoard = new LeaderBoard();
         this.carComponents = new HashMap<>();
+        this.timer = new Timer((int) (STEP_TIME * 1000.0), this);
+        timer.setActionCommand("step");
 
         // styling
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
@@ -46,11 +50,6 @@ public class Menu extends JPanel implements ActionListener {
         addCarButton.setActionCommand("add_car");
         addCarButton.addActionListener(this);
         top.add(addCarButton);
-
-        JButton stepButton = new JButton("Step");
-        stepButton.setActionCommand("step");
-        stepButton.addActionListener(this);
-        top.add(stepButton);
 
         //bottom pane
         JPanel bottom = new JPanel();
@@ -106,6 +105,7 @@ public class Menu extends JPanel implements ActionListener {
         carComponents.clear();
         mapPanel.removeAll();
         mapPanel.repaint();
+        timer.stop();
 
         for (Component comp : carsPane.getComponents()) {
             if (comp instanceof CarConfigPanel configPanel) {
@@ -152,6 +152,8 @@ public class Menu extends JPanel implements ActionListener {
 
             redrawRace();
             isRaceRunning = true;
+            timer.start();
+            lastTime = Utility.secondsElapsed();
         } catch (RuntimeException exception) {
             resetRace();
 
@@ -160,7 +162,10 @@ public class Menu extends JPanel implements ActionListener {
         }
     }
 
-    private void stepRace(double timeElapsed) {
+    private void stepRace() {
+        double curTime = Utility.secondsElapsed();
+        double timeElapsed = curTime - lastTime;
+
         if (!isRaceRunning) {
             return;
         }
@@ -177,6 +182,7 @@ public class Menu extends JPanel implements ActionListener {
                 car.setPosition(newPosition);
             }
         }
+        lastTime = curTime;
 
         // TODO: detect when race is over
         leaderBoard.calculateCarOrder(raceTrack.getCars());
@@ -204,7 +210,7 @@ public class Menu extends JPanel implements ActionListener {
             case "add_car" -> addConfigPanel();
             case "run_race" -> startRace();
             case "reset" -> resetRace();
-            case "step" -> stepRace(STEP_TIME);
+            case "step" -> stepRace();
         }
     }
 }
