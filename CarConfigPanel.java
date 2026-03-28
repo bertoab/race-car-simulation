@@ -12,7 +12,7 @@ public class CarConfigPanel extends JPanel implements ActionListener {
     private boolean readOnly = false;
 
     public CarConfigPanel(String defaultName) {
-        setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+        setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
         setLayout(new GridBagLayout());
 
         JLabel carNameLabel = new JLabel("Car Name:");
@@ -21,8 +21,9 @@ public class CarConfigPanel extends JPanel implements ActionListener {
         c.gridy = 1;
         c.anchor = GridBagConstraints.LINE_START;
         c.ipadx = 4;
+        c.weightx = 1.0;
         add(carNameLabel, c);
-        nameField = new JTextField(10);
+        nameField = new JTextField(9);
         c = new GridBagConstraints();
         c.gridx = 1;
         c.gridy = 1;

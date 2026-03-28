@@ -3,9 +3,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Random;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class Menu extends JPanel implements ActionListener {
     private static final int INITIAL_NUM_CARS = 6;
@@ -22,7 +20,6 @@ public class Menu extends JPanel implements ActionListener {
      * button
      */
     private ArrayList<Car> cars;
-    private HashSet<Integer> carStartTracks;
     private boolean isRaceRunning = false;
 
     public Menu() {
@@ -31,8 +28,7 @@ public class Menu extends JPanel implements ActionListener {
 
     public Menu(MapPanel mapPanel) {
         this.mapPanel = mapPanel;
-        cars = new ArrayList<Car>();
-        carStartTracks = new HashSet<Integer>();
+        cars = new ArrayList<>();
 
         // styling
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
@@ -74,6 +70,10 @@ public class Menu extends JPanel implements ActionListener {
     }
 
     private void addConfigPanel() {
+        if (isRaceRunning) {
+            return;
+        }
+
         try {
             int carCount = carsPane.getComponentCount() + 1;
             if (carCount >= TOTAL_TRACKS) {
@@ -103,60 +103,61 @@ public class Menu extends JPanel implements ActionListener {
         }
     }
 
+    private void startRace() {
+        if (isRaceRunning) {
+            return;
+        }
+
+        try {
+            cars.clear();
+            mapPanel.removeAll();
+
+            int carIndex = 0;
+            for (Component comp : carsPane.getComponents()) {
+                if (comp instanceof CarConfigPanel configPanel) {
+                    if (carIndex >= TOTAL_TRACKS) {
+                        String message = String.format("Cannot add more than %d cars.\n", TOTAL_TRACKS);
+                        throw new IllegalStateException(message);
+                    }
+
+                    configPanel.setReadOnly(true);
+
+                    Car car = configPanel.makeCar(carIndex, TOTAL_TRACKS);
+                    cars.add(car);
+
+                    //FIXME: eventually replace this statement with an array
+                    CarComponent mapCar = new CarComponent();
+
+                    mapPanel.add(mapCar);
+                    mapCar.setLocation((int)mapPanel.getLocationCoords(carIndex).getX(), (int)mapPanel.getLocationCoords(carIndex).getY());
+
+                    carIndex++;
+                }
+            }
+
+            if (carIndex < 2) {
+                throw new IllegalStateException("Need at least 2 cars to start the race!");
+            }
+
+            mapPanel.repaint();
+            isRaceRunning = true;
+        } catch (RuntimeException exception) {
+            resetRace();
+
+            JOptionPane.showMessageDialog(null, exception.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // TODO: actually run the race
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
-        if (action.equals("add_car")) {
-            addConfigPanel();
-        } else if (action.equals("run_race")) {
-            if (isRaceRunning) {
-                return;
-            }
-
-            try {
-                cars.clear();
-                mapPanel.removeAll();
-                Random randGen = new Random();
-
-                int carIndex = 0;
-                for (Component comp : carsPane.getComponents()) {
-                    if (comp instanceof CarConfigPanel configPanel) {
-                        if (carIndex >= TOTAL_TRACKS) {
-                            String message = String.format("Cannot add more than %d cars.\n", TOTAL_TRACKS);
-                            throw new IllegalStateException(message);
-                        }
-
-                        configPanel.setReadOnly(true);
-
-                        Car car = configPanel.makeCar(carIndex, TOTAL_TRACKS);
-                        cars.add(car);
-
-                        //FIXME: eventually replace this statement with an array
-                        CarComponent mapCar = new CarComponent();
-
-                        mapPanel.add(mapCar);
-                        mapCar.setLocation((int)mapPanel.getLocationCoords(carIndex).getX(), (int)mapPanel.getLocationCoords(carIndex).getY());
-
-                        carIndex++;
-                    }
-                }
-
-                if (carIndex < 2) {
-                    throw new IllegalStateException("Need at least 2 cars to start the race!");
-                }
-
-                mapPanel.repaint();
-                isRaceRunning = true;
-            } catch (RuntimeException exception) {
-                resetRace();
-
-                JOptionPane.showMessageDialog(null, exception.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
-            }
-
-            // TODO: actually run the race
-        } else if (action.equals("reset")) {
-            resetRace();
+        switch (action) {
+            case "add_car" -> addConfigPanel();
+            case "run_race" -> startRace();
+            case "reset" -> resetRace();
         }
     }
 }
