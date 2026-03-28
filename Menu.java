@@ -131,11 +131,11 @@ public class Menu extends JPanel implements ActionListener {
                         Car car = configPanel.makeCar(carIndex, TOTAL_TRACKS);
                         cars.add(car);
 
-                        //FIXME: eventually replace this statement with an arraylist
+                        //FIXME: eventually replace this statement with an array
                         CarComponent mapCar = new CarComponent();
 
                         mapPanel.add(mapCar);
-                        mapCar.setLocation(randGen.nextInt(mapPanel.getWidth()), randGen.nextInt(mapPanel.getHeight()));
+                        mapCar.setLocation((int)mapPanel.getLocationCoords(carIndex).getX(), (int)mapPanel.getLocationCoords(carIndex).getY());
 
                         carIndex++;
                     }

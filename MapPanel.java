@@ -10,6 +10,9 @@ public class MapPanel extends JPanel {
     private Image mapImage;
     private final double[] xRatios;
     private final double[] yRatios;
+    
+    //FIXME: placeholder, implement this in a better way
+    private final String[] locationNames = {"A","B","C","D","E","F","G","H","I","J"};
 
     public MapPanel() {
         setLayout(null);
@@ -35,6 +38,10 @@ public class MapPanel extends JPanel {
 
     public Point getLocationCoords(int locationIndex) {
         return new Point((int)(xRatios[locationIndex] * getWidth()), (int)(yRatios[locationIndex] * getHeight()));
+    }
+
+    public String[] getLocationNames() {
+        return locationNames;
     }
 
     @Override
