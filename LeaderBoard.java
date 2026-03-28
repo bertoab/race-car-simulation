@@ -1,5 +1,7 @@
 //Andrew Larrazabal
 
+import java.util.List;
+
 public class LeaderBoard {
     //ATTRIBUTES
     private final Car[] cars;
@@ -14,7 +16,7 @@ public class LeaderBoard {
     }
 
     //METHODS
-    public void calculateCarOrder() {
+    public void calculateCarOrder(List<Car> cars) {
         
     }
 

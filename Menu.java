@@ -3,23 +3,22 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Menu extends JPanel implements ActionListener {
     private static final int INITIAL_NUM_CARS = 6;
+    // FIXME: this belongs in RaceTrack, as something like RaceTrack.getTrackCount()
     private static final int TOTAL_TRACKS = 10;
-    private static final int LAST_TRACK_INDEX = TOTAL_TRACKS - 1;
+    private static double STEP_TIME = 1.0;
 
-    private Box carsPane;
-    private MapPanel mapPanel;
-    /*
-     * FIXME: `cars` should be of RaceTrack type
-     * currently, RaceTrack isn't implemented. however, even
-     * if it was, it does not support an array of variable size,
-     * thus it is incompatible with the behavior of the "add_car"
-     * button
-     */
-    private ArrayList<Car> cars;
+    private final Box carsPane;
+    private final MapPanel mapPanel;
+    private final RaceTrack raceTrack;
+    private final LeaderBoard leaderBoard;
+    // TODO: is this the best way to do this? wouldn't it be better for each CarComponent to just store a reference to its corresponding Car?
+    private final HashMap<Car, CarComponent> carComponents;
     private boolean isRaceRunning = false;
 
     public Menu() {
@@ -28,7 +27,14 @@ public class Menu extends JPanel implements ActionListener {
 
     public Menu(MapPanel mapPanel) {
         this.mapPanel = mapPanel;
-        cars = new ArrayList<>();
+        // FIXME: placeholder track distances
+        this.raceTrack = new RaceTrack(new double[] {
+            120.0, 120.0, 120.0, 120.0, 120.0, 120.0,
+            120.0, 120.0, 120.0, 120.0, 120.0, 120.0,
+        }, null);
+        // TODO: add leaderboard component to view when complete
+        this.leaderBoard = new LeaderBoard();
+        this.carComponents = new HashMap<>();
 
         // styling
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
@@ -41,6 +47,11 @@ public class Menu extends JPanel implements ActionListener {
         addCarButton.setActionCommand("add_car");
         addCarButton.addActionListener(this);
         top.add(addCarButton);
+
+        JButton stepButton = new JButton("Step");
+        stepButton.setActionCommand("step");
+        stepButton.addActionListener(this);
+        top.add(stepButton);
 
         //bottom pane
         JPanel bottom = new JPanel();
@@ -92,7 +103,8 @@ public class Menu extends JPanel implements ActionListener {
 
     private void resetRace() {
         isRaceRunning = false;
-        cars.clear();
+        raceTrack.clearCars();
+        carComponents.clear();
         mapPanel.removeAll();
         mapPanel.repaint();
 
@@ -109,7 +121,8 @@ public class Menu extends JPanel implements ActionListener {
         }
 
         try {
-            cars.clear();
+            raceTrack.clearCars();
+            carComponents.clear();
             mapPanel.removeAll();
 
             int carIndex = 0;
@@ -123,12 +136,11 @@ public class Menu extends JPanel implements ActionListener {
                     configPanel.setReadOnly(true);
 
                     Car car = configPanel.makeCar(carIndex, TOTAL_TRACKS);
-                    cars.add(car);
+                    raceTrack.addCar(car);
 
-                    //FIXME: eventually replace this statement with an array
-                    CarComponent mapCar = new CarComponent();
-
+                    CarComponent mapCar = new CarComponent(car.getName());
                     mapPanel.add(mapCar);
+                    carComponents.put(car, mapCar);
                     mapCar.setLocation((int)mapPanel.getLocationCoords(carIndex).getX(), (int)mapPanel.getLocationCoords(carIndex).getY());
 
                     carIndex++;
@@ -139,7 +151,7 @@ public class Menu extends JPanel implements ActionListener {
                 throw new IllegalStateException("Need at least 2 cars to start the race!");
             }
 
-            mapPanel.repaint();
+            redrawRace();
             isRaceRunning = true;
         } catch (RuntimeException exception) {
             resetRace();
@@ -147,8 +159,43 @@ public class Menu extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(null, exception.getMessage(),
                 "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
 
-        // TODO: actually run the race
+    private void stepRace(double timeElapsed) {
+        if (!isRaceRunning) {
+            return;
+        }
+
+        for (Car car : raceTrack.getCars()) {
+            if (!car.hasFinished()) {
+                int curTrack = car.getCurrentTrackIndex();
+                double deltaDist = timeElapsed * car.getSpeed();
+
+                double totalTrackDist = raceTrack.getTrackSections()[curTrack];
+
+                // FIXME: if this is more than 1, the car will move onto the next track with a speed proportional to the current track
+                double newPosition = car.getPosition() + (deltaDist / totalTrackDist);
+                car.setPosition(newPosition);
+            }
+        }
+
+        // TODO: detect when race is over
+        leaderBoard.calculateCarOrder(raceTrack.getCars());
+        redrawRace();
+    }
+
+    private void redrawRace() {
+        for (Map.Entry<Car, CarComponent> entry : carComponents.entrySet()) {
+            Car car = entry.getKey();
+            CarComponent carComponent = entry.getValue();
+
+            Point p1 = mapPanel.getLocationCoords(car.getCurrentTrackIndex());
+            Point p2 = mapPanel.getLocationCoords((car.getCurrentTrackIndex() + 1) % TOTAL_TRACKS);
+
+            carComponent.setLocation(Utility.lerp(p1, p2, car.getPosition()));
+        }
+
+        mapPanel.repaint();
     }
 
     @Override
@@ -158,6 +205,7 @@ public class Menu extends JPanel implements ActionListener {
             case "add_car" -> addConfigPanel();
             case "run_race" -> startRace();
             case "reset" -> resetRace();
+            case "step" -> stepRace(STEP_TIME);
         }
     }
 }

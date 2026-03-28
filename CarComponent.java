@@ -4,10 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CarComponent extends JPanel {
-    public CarComponent() {
+    private final String name;
+    private static final int CIRCLE_SIZE = 20;
+    private static final int LABEL_SIZE = 40;
+
+    public CarComponent(String name) {
         setOpaque(false);
         //FIXME: placeholder
-        setSize(30, 30);
+        setSize(CIRCLE_SIZE + LABEL_SIZE, CIRCLE_SIZE);
+        this.name = name;
     }
 
     @Override
@@ -16,7 +21,9 @@ public class CarComponent extends JPanel {
 
         //FIXME: placeholder
         g.setColor(Color.RED);
-        g.fillOval(0, 0, getWidth(), getHeight());
+        g.fillOval(0, 0, CIRCLE_SIZE, CIRCLE_SIZE);
+        g.setColor(Color.BLACK);
+        g.drawString(name, CIRCLE_SIZE, 3 * CIRCLE_SIZE / 4);
     }
 
 }

@@ -3,14 +3,18 @@
 //This class stores the track sections and the cars racing on them so the program can manage the race
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class RaceTrack {
     private double[] trackSections; // track section lengths
-    private Car[] cars; // cars in the race
+    private ArrayList<Car> cars; // cars in the race
 
     // default constructor
     public RaceTrack() {
         trackSections = new double[0];
-        cars = new Car[0];
+        cars = new ArrayList<>();
     }
 
     // constructor
@@ -22,9 +26,9 @@ public class RaceTrack {
         }
 
         if (cars == null) {
-            this.cars = new Car[0];
+            this.cars = new ArrayList<>();
         } else {
-            this.cars = cars;
+            this.cars = new ArrayList<>(Arrays.asList(cars));
         }
     }
 
@@ -39,12 +43,15 @@ public class RaceTrack {
     }
 
     // gets cars
-    public Car[] getCars() {
+    public List<Car> getCars() {
         return cars;
     }
 
-    // sets cars
-    public void setCars(Car[] cars) {
-        this.cars = cars;
+    public void addCar(Car car) {
+        cars.add(car);
+    }
+
+    public void clearCars() {
+        cars.clear();
     }
 }

@@ -11,7 +11,7 @@ public class Car {
     private final int goalTrackIndex;
     private final int totalTracks;
     private double positionInTrackSection;
-    private Set<StatusEffect> statusEffects;
+    private final Set<StatusEffect> statusEffects;
 
     public Car(String name, int startTrackIndex, int goalTrackIndex, int totalTracks) {
         this.name = name;
@@ -55,7 +55,7 @@ public class Car {
 
         if (position >= 1.0) {
             // If the position is 1 or greater, then move to the next track
-            int trackIncrement = (int) Math.floor(position);
+            int trackIncrement = Utility.floorInt(position);
 
             // Avoid overshooting the goal track
             int tracksRemaining = Math.floorMod(goalTrackIndex - currentTrackIndex, totalTracks);
@@ -64,7 +64,7 @@ public class Car {
                 this.positionInTrackSection = 0.0;
             } else {
                 this.currentTrackIndex = (currentTrackIndex + trackIncrement) % totalTracks;
-                this.positionInTrackSection = trackIncrement - position;
+                this.positionInTrackSection = position - trackIncrement;
             }
         } else {
             this.positionInTrackSection = position;
