@@ -101,6 +101,14 @@ public class Car {
         statusEffects.remove(statusEffect);
     }
 
+    public boolean hasEffect(StatusEffect statusEffect) {
+        return statusEffects.contains(statusEffect);
+    }
+
+    public void clearEffects() {
+        statusEffects.clear();
+    }
+
     @Override
     public String toString() {
         return "Car (" + name + ")";

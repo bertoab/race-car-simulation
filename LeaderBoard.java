@@ -6,7 +6,6 @@ import javax.swing.JTextArea;
 
 public class LeaderBoard extends JPanel {
     //ATTRIBUTES
-    //private final Car[] cars;
     private static final String TITLE = "LeaderBoard\n";
     private JTextArea placements;
     private String resultText;
@@ -22,6 +21,7 @@ public class LeaderBoard extends JPanel {
         placements = new JTextArea();
         placements.setFocusable(false);
         placements.setText(resultText);
+        placements.setEditable(false);
         add(placements);
         setBackground(placements.getBackground());
         setSize(placements.getPreferredSize());
