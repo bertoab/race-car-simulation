@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-// Contains all state for a single car
+// Contains all states for a single car
 public class Car {
     private String name;
     private double speed;
