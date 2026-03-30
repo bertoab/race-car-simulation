@@ -93,4 +93,24 @@ public class NumberField extends JTextField implements DocumentListener {
     public void changedUpdate(DocumentEvent e) {
         textUpdated();
     }
+
+    @Override
+    public String toString() {
+        return getText();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof NumberField)) {
+            return false;
+        }
+
+        NumberField otherField = (NumberField)obj;
+
+        if (getText().equals(otherField.getText())) {
+            return true;
+        }
+
+        return false;
+    }
 }

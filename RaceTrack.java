@@ -2,6 +2,7 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 //This class stores the track sections and the cars racing on them so the program can manage the race
 public class RaceTrack {
@@ -36,5 +37,25 @@ public class RaceTrack {
 
     public void clearCars() {
         cars.clear();
+    }
+
+    @Override
+    public String toString() {
+        return "RaceTrack[number of track sections: " + trackSections.length + "]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof RaceTrack)) {
+            return false;
+        }
+
+        RaceTrack otherCar = (RaceTrack)obj;
+
+        if (otherCar.trackSections.length == trackSections.length) {
+            return true;
+        }
+
+        return false;
     }
 }
