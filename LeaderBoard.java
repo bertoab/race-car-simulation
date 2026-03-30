@@ -6,17 +6,16 @@ import javax.swing.JTextArea;
 
 public class LeaderBoard extends JPanel {
     //ATTRIBUTES
-    //private final Car[] cars;
     private static final String TITLE = "LeaderBoard\n";
     private JTextArea placements;
     private String resultText;
 
     //CONSTRUCTORS
     public LeaderBoard() {
-        //cars = new Car[4];
         resultText = TITLE;
         placements = new JTextArea();
         placements.setText(resultText);
+        placements.setEditable(false);
         add(placements);
     }
 

@@ -37,21 +37,12 @@ public class Menu extends JPanel implements ActionListener {
     private double lastTime = 0;
     private double totalTime = 0; //ANDREW: added another attribute to calculate the time elapsed
 
-    public Menu() {
-        this(null);
-    }
-
-    public Menu(MapPanel mapPanel) {
+    public Menu(MapPanel mapPanel, RaceTrack raceTrack) {
         rand = new Random();
         finishOrder = new ArrayList<Car>();
 
         this.mapPanel = mapPanel;
-        // FIXME: idk if this is the best place to hardcode it or if it should be hardcoded at all but I added the right lengths for now
-        this.raceTrack = new RaceTrack(new double[] {
-            110.0, 117.0, 69.0, 67.0, 87.0,
-            162.0, 115.0, 105.0, 83.0, 55.0,
-            },
-            null);
+        this.raceTrack = raceTrack;
         // TODO: add leaderboard component to view when complete
         this.leaderBoard = new LeaderBoard();
         this.carComponents = new ArrayList<CarComponent>();
