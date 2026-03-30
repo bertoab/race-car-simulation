@@ -9,7 +9,11 @@ public class RaceTrack {
     private final StatusEffect[][] trackEffects; // array of StatusEffects to be applied at each corresponding track section
     private final ArrayList<Car> cars; // cars in the race
 
-    // constructor
+
+    // constructors
+    public RaceTrack() {
+        this(new double[] {}, new StatusEffect[][] {});
+    }
     public RaceTrack(double[] trackSections,  StatusEffect[][] trackEffects) {
         this.trackSections = trackSections;
         this.trackEffects = trackEffects;
