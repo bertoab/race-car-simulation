@@ -3,21 +3,35 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
 
 public class Menu extends JPanel implements ActionListener {
     private static final int INITIAL_NUM_CARS = 6;
-    // FIXME: this belongs in RaceTrack, as something like RaceTrack.getTrackCount()
-    private static final int TOTAL_TRACKS = 10;
     private static final double STEP_TIME = 1.0 / 30.0;
+
+    private static final Color[] POSSIBLE_COLORS = {
+        Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.PINK,
+        Color.BLACK, Color.ORANGE, Color.WHITE, Color.GRAY, Color.CYAN
+    };
+
+    //FIXME: maybe implement this in RaceTrack instead
+    private static final StatusEffect[][] TRACK_EFFECTS = new StatusEffect[][] {
+        {StatusEffect.CONCRETE}, {}, {}, {StatusEffect.UPHILL, StatusEffect.SNOW}, {StatusEffect.SNOW},
+        {StatusEffect.DOWNHILL, StatusEffect.SNOW}, {StatusEffect.DOWNHILL}, {StatusEffect.SAND}, {StatusEffect.SAND}, {StatusEffect.UPHILL, StatusEffect.SAND}
+    };
+
+    private Random rand;
 
     private final Box carsPane;
     private final MapPanel mapPanel;
     private final RaceTrack raceTrack;
     private final LeaderBoard leaderBoard;
-    // TODO: is this the best way to do this? wouldn't it be better for each CarComponent to just store a reference to its corresponding Car?
-    private final HashMap<Car, CarComponent> carComponents;
+
+    private ArrayList<Car> finishOrder; //list of the cars in the order they finished
+
+    private final ArrayList<CarComponent> carComponents;
     private boolean isRaceRunning = false;
     private final Timer timer;
     private double lastTime = 0;
@@ -27,15 +41,20 @@ public class Menu extends JPanel implements ActionListener {
     }
 
     public Menu(MapPanel mapPanel) {
+        rand = new Random();
+        finishOrder = new ArrayList<Car>();
+
         this.mapPanel = mapPanel;
-        // FIXME: placeholder track distances
+        // FIXME: idk if this is the best place to hardcode it or if it should be hardcoded at all but I added the right lengths for now
         this.raceTrack = new RaceTrack(new double[] {
-            120.0, 120.0, 120.0, 120.0, 120.0, 120.0,
-            120.0, 120.0, 120.0, 120.0, 120.0, 120.0,
-        }, null);
+            110.0, 117.0, 69.0, 67.0, 87.0,
+            162.0, 115.0, 105.0, 83.0, 55.0,
+            },
+            null);
         // TODO: add leaderboard component to view when complete
         this.leaderBoard = new LeaderBoard();
-        this.carComponents = new HashMap<>();
+        this.carComponents = new ArrayList<CarComponent>();
+
         this.timer = new Timer((int) (STEP_TIME * 1000.0), this);
         timer.setActionCommand("step");
 
@@ -85,8 +104,8 @@ public class Menu extends JPanel implements ActionListener {
 
         try {
             int carCount = carsPane.getComponentCount() + 1;
-            if (carCount >= TOTAL_TRACKS) {
-                String message = String.format("Cannot add more than %d cars.\n", TOTAL_TRACKS);
+            if (carCount >= raceTrack.getTrackSections().length) {
+                String message = String.format("Cannot add more than %d cars.\n", raceTrack.getTrackSections().length);
                 throw new IllegalStateException(message);
             }
 
@@ -101,6 +120,7 @@ public class Menu extends JPanel implements ActionListener {
 
     private void resetRace() {
         isRaceRunning = false;
+        finishOrder.clear();
         raceTrack.clearCars();
         carComponents.clear();
         mapPanel.removeAll();
@@ -120,6 +140,7 @@ public class Menu extends JPanel implements ActionListener {
         }
 
         try {
+            finishOrder.clear();
             raceTrack.clearCars();
             carComponents.clear();
             mapPanel.removeAll();
@@ -127,19 +148,24 @@ public class Menu extends JPanel implements ActionListener {
             int carIndex = 0;
             for (Component comp : carsPane.getComponents()) {
                 if (comp instanceof CarConfigPanel configPanel) {
-                    if (carIndex >= TOTAL_TRACKS) {
-                        String message = String.format("Cannot add more than %d cars.\n", TOTAL_TRACKS);
+                    if (carIndex >= raceTrack.getTrackSections().length) {
+                        String message = String.format("Cannot add more than %d cars.\n", raceTrack.getTrackSections().length);
                         throw new IllegalStateException(message);
                     }
 
                     configPanel.setReadOnly(true);
 
-                    Car car = configPanel.makeCar(carIndex, TOTAL_TRACKS);
+                    Car car = configPanel.makeCar(carIndex, raceTrack.getTrackSections().length);
                     raceTrack.addCar(car);
 
-                    CarComponent mapCar = new CarComponent(car.getName());
+                    StatusEffect[] sectionEffects = TRACK_EFFECTS[car.getCurrentTrackIndex()];
+                    for (int i = 0; i < sectionEffects.length; ++i) {
+                        car.addEffect(sectionEffects[i]);
+                    }
+
+                    CarComponent mapCar = new CarComponent(car, POSSIBLE_COLORS[carIndex]);
                     mapPanel.add(mapCar);
-                    carComponents.put(car, mapCar);
+                    carComponents.add(mapCar);
                     mapCar.setLocation((int)mapPanel.getLocationCoords(carIndex).getX(), (int)mapPanel.getLocationCoords(carIndex).getY());
 
                     carIndex++;
@@ -175,27 +201,74 @@ public class Menu extends JPanel implements ActionListener {
                 int curTrack = car.getCurrentTrackIndex();
                 double deltaDist = timeElapsed * car.getSpeed();
 
+                StatusEffect[] sectionEffects = TRACK_EFFECTS[curTrack];
+
+                //roll to apply chance effects
+                if (!(car.getStatusEffects().contains(StatusEffect.MUDDIED)) && rand.nextInt(500) == 0) {
+                    car.addEffect(StatusEffect.MUDDIED);
+                }
+
+                if ((car.getStatusEffects().contains(StatusEffect.MUDDIED)) && rand.nextInt(100) == 0) {
+                    car.removeEffect(StatusEffect.MUDDIED);
+                }
+
+                if (!(car.getStatusEffects().contains(StatusEffect.TIRE_POPPED)) && rand.nextInt(2000) == 0) {
+                    car.addEffect(StatusEffect.TIRE_POPPED);
+                }
+
+                //apply car status effects
+                Iterator<StatusEffect> effectIterator = car.getStatusEffects().iterator();
+
+                while (effectIterator.hasNext()) {
+                    deltaDist *= effectIterator.next().multiplier;
+                }
+
+                //apply position change
                 double totalTrackDist = raceTrack.getTrackSections()[curTrack];
 
-                // FIXME: if this is more than 1, the car will move onto the next track with a speed proportional to the current track
+                //FIXME: if this is more than 1, the car will move onto the next track with a speed proportional to the current track
                 double newPosition = car.getPosition() + (deltaDist / totalTrackDist);
                 car.setPosition(newPosition);
+
+                if (newPosition >= 1.0) {
+                    //set new track section effects if the car changed track sections
+                    for (int i = 0; i < sectionEffects.length; ++i) {
+                        car.removeEffect(sectionEffects[i]);
+                    }
+
+                    sectionEffects = TRACK_EFFECTS[car.getCurrentTrackIndex()];
+                    for (int i = 0; i < sectionEffects.length; ++i) {
+                        car.addEffect(sectionEffects[i]);
+                    }
+
+                    if (car.hasFinished()) {
+                        finishOrder.add(car);
+                    }
+                }
             }
         }
         lastTime = curTime;
 
-        // TODO: detect when race is over
+        if (finishOrder.size() == raceTrack.getCars().size()) {
+            //TODO: add win screen
+
+            //FIXME: placeholder code (especially the finishOrder.add() statement)
+            finishOrder.add(new Car("", 0, 0, 0));
+            JOptionPane.showMessageDialog(null, "(Placeholder) Race finished!",
+                    "(Placeholder) Finished", JOptionPane.INFORMATION_MESSAGE);
+        }
+
         leaderBoard.calculateCarOrder(raceTrack.getCars());
+
         redrawRace();
     }
 
     private void redrawRace() {
-        for (Map.Entry<Car, CarComponent> entry : carComponents.entrySet()) {
-            Car car = entry.getKey();
-            CarComponent carComponent = entry.getValue();
+        for (CarComponent carComponent : carComponents) {
+            Car car = carComponent.getCar();
 
             Point p1 = mapPanel.getLocationCoords(car.getCurrentTrackIndex());
-            Point p2 = mapPanel.getLocationCoords((car.getCurrentTrackIndex() + 1) % TOTAL_TRACKS);
+            Point p2 = mapPanel.getLocationCoords((car.getCurrentTrackIndex() + 1) % raceTrack.getTrackSections().length);
 
             carComponent.setLocation(Utility.lerp(p1, p2, car.getPosition()));
         }

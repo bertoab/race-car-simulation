@@ -38,7 +38,7 @@ public class CarConfigPanel extends JPanel implements ActionListener {
         add(speedLabel, c);
 
         int numDigits = (int) Math.ceil(Math.log10(Car.MAX_SPEED));
-        speedField = new NumberField(0, 0, (int) Car.MAX_SPEED);
+        speedField = new NumberField(0, 1, (int) Car.MAX_SPEED);
         speedField.setColumns(numDigits);
         c = new GridBagConstraints();
         c.gridx = 1;
@@ -56,7 +56,7 @@ public class CarConfigPanel extends JPanel implements ActionListener {
         add(removeButton, c);
 
         Random rand = new Random();
-        speedField.setCurValue(rand.nextInt(0, (int) Car.MAX_SPEED + 1));
+        speedField.setCurValue(rand.nextInt(20, (int) Car.MAX_SPEED + 1));
         nameField.setText(defaultName);
     }
 
