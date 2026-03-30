@@ -12,7 +12,13 @@ public class RaceTrack {
 
     // constructors
     public RaceTrack() {
-        this(new double[] {}, new StatusEffect[][] {});
+        this(
+            new double[] {110.0, 117.0, 69.0, 67.0, 87.0, 162.0, 115.0, 105.0, 83.0, 55.0},
+            new StatusEffect[][] {
+                {StatusEffect.CONCRETE}, {}, {}, {StatusEffect.UPHILL, StatusEffect.SNOW}, {StatusEffect.SNOW},
+                {StatusEffect.DOWNHILL, StatusEffect.SNOW}, {StatusEffect.DOWNHILL}, {StatusEffect.SAND}, {StatusEffect.SAND}, {StatusEffect.UPHILL, StatusEffect.SAND}
+            }
+        );
     }
     public RaceTrack(double[] trackSections,  StatusEffect[][] trackEffects) {
         this.trackSections = trackSections;

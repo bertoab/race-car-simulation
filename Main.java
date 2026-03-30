@@ -14,17 +14,8 @@ public class Main {
         frame.setSize(WINDOW_DIMENSION);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //TODO: move into config file, calculate from pixel coordinates instead of hardcoding
-        double[] xRatios = {0.7052, 0.7104, 0.4592, 0.4417, 0.2865, 0.3969, 0.3417, 0.5573, 0.8031, 0.825};
-        double[] yRatios = {0.4681, 0.2042, 0.0792, 0.2431, 0.2806, 0.4569, 0.8403, 0.6708, 0.7236, 0.525};
-        double[] trackLengths = {110.0, 117.0, 69.0, 67.0, 87.0, 162.0, 115.0, 105.0, 83.0, 55.0};
-        StatusEffect[][] effects = {
-            {StatusEffect.CONCRETE}, {}, {}, {StatusEffect.UPHILL, StatusEffect.SNOW}, {StatusEffect.SNOW},
-            {StatusEffect.DOWNHILL, StatusEffect.SNOW}, {StatusEffect.DOWNHILL}, {StatusEffect.SAND}, {StatusEffect.SAND}, {StatusEffect.UPHILL, StatusEffect.SAND}
-        };
-
-        MapPanel map = new MapPanel(new File("map.png"), xRatios, yRatios);
-        RaceTrack raceTrack = new RaceTrack(trackLengths, effects);
+        MapPanel map = new MapPanel();
+        RaceTrack raceTrack = new RaceTrack();
 
         Menu menu = new Menu(map, raceTrack);
 
