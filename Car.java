@@ -115,5 +115,20 @@ public class Car {
         return "Car (" + name + ")";
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Car)) {
+            return false;
+        }
+
+        Car otherCar = (Car)obj;
+
+        if (otherCar.name.equals(name)) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static final double MAX_SPEED = 60;
 }

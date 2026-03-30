@@ -47,8 +47,15 @@ public class LeaderBoard extends JPanel {
         return resultText;
     }
 
-    public boolean equals(LeaderBoard other) {
-        return resultText.equals(other.getLeaderBoardText());
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof LeaderBoard)) {
+            return false;
+        }
+
+        LeaderBoard otherBoard = (LeaderBoard)obj;
+
+        return resultText.equals(otherBoard.getLeaderBoardText());
     }
 
     @Override

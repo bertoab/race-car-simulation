@@ -153,6 +153,8 @@ public class Menu extends JPanel implements ActionListener {
             clearRaceData();
 
             totalTime = 0;
+
+            //iterate through each existing CarConfigPanel and prepare a corresponding CarComponent and Car
             int carIndex = 0;
             for (Component comp : carsPane.getComponents()) {
                 if (comp instanceof CarConfigPanel configPanel) {
@@ -210,6 +212,7 @@ public class Menu extends JPanel implements ActionListener {
             return;
         }
 
+        //iterate through each Car object to update its status effects and position
         for (Car car : raceTrack.getCars()) {
             if (!car.hasFinished()) {
                 int curTrack = car.getCurrentTrackIndex();
@@ -253,6 +256,7 @@ public class Menu extends JPanel implements ActionListener {
                         car.addEffect(sectionEffects[i]);
                     }
 
+                    //add any finished cars to leaderboard
                     if (car.hasFinished()) {
                         carsFinished += 1;
                         leaderBoard.addCarEntry(car, totalTime);
@@ -297,5 +301,25 @@ public class Menu extends JPanel implements ActionListener {
             case "reset" -> resetRace();
             case "step" -> stepRace();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Menu[number of CarConfigPanels: " + carsPane.getComponentCount() + "]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Menu)) {
+            return false;
+        }
+
+        Menu otherMenu = (Menu)obj;
+
+        if (otherMenu.carsPane.getComponentCount() == (carsPane.getComponentCount())) {
+            return true;
+        }
+
+        return false;
     }
 }

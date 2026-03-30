@@ -91,4 +91,24 @@ public class CarConfigPanel extends JPanel implements ActionListener {
         car.setSpeed(speedField.getCurValue());
         return car;
     }
+
+    @Override
+    public String toString() {
+        return "CarConfigPanel[name:" + nameField.getText() + ", speed:" + speedField.getCurValue() + "]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CarConfigPanel)) {
+            return false;
+        }
+
+        CarConfigPanel otherPanel = (CarConfigPanel)obj;
+
+        if (otherPanel.nameField.getText().equals(nameField.getText()) && (otherPanel.speedField.getCurValue() == (speedField.getCurValue()))) {
+            return true;
+        }
+
+        return false;
+    }
 }
