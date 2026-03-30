@@ -16,13 +16,7 @@ public class Menu extends JPanel implements ActionListener {
         Color.BLACK, Color.ORANGE, Color.WHITE, Color.GRAY, Color.CYAN
     };
 
-    //FIXME: maybe implement this in RaceTrack instead
-    private static final StatusEffect[][] TRACK_EFFECTS = new StatusEffect[][] {
-        {StatusEffect.CONCRETE}, {}, {}, {StatusEffect.UPHILL, StatusEffect.SNOW}, {StatusEffect.SNOW},
-        {StatusEffect.DOWNHILL, StatusEffect.SNOW}, {StatusEffect.DOWNHILL}, {StatusEffect.SAND}, {StatusEffect.SAND}, {StatusEffect.UPHILL, StatusEffect.SAND}
-    };
-
-    private Random rand;
+    private final Random rand;
 
     private final Box carsPane;
     private final MapPanel mapPanel;
@@ -42,9 +36,8 @@ public class Menu extends JPanel implements ActionListener {
 
         this.mapPanel = mapPanel;
         this.raceTrack = raceTrack;
-        // TODO: add leaderboard component to view when complete
         this.leaderBoard = new LeaderBoard();
-        this.carComponents = new ArrayList<CarComponent>();
+        this.carComponents = new ArrayList<>();
 
         this.timer = new Timer((int) (STEP_TIME * 1000.0), this);
         timer.setActionCommand("step");
@@ -167,7 +160,7 @@ public class Menu extends JPanel implements ActionListener {
                     Car car = configPanel.makeCar(carIndex, raceTrack.getTrackSections().length);
                     raceTrack.addCar(car);
 
-                    StatusEffect[] sectionEffects = TRACK_EFFECTS[car.getCurrentTrackIndex()];
+                    StatusEffect[] sectionEffects = raceTrack.getEffectsForSection(car.getCurrentTrackIndex());
                     for (int i = 0; i < sectionEffects.length; ++i) {
                         car.addEffect(sectionEffects[i]);
                     }
@@ -211,7 +204,7 @@ public class Menu extends JPanel implements ActionListener {
                 int curTrack = car.getCurrentTrackIndex();
                 double deltaDist = timeElapsed * car.getSpeed();
 
-                StatusEffect[] sectionEffects = TRACK_EFFECTS[curTrack];
+                StatusEffect[] sectionEffects = raceTrack.getEffectsForSection(curTrack);
 
                 //roll to apply chance effects
                 for (StatusEffect effect : StatusEffect.values()) {
@@ -245,7 +238,7 @@ public class Menu extends JPanel implements ActionListener {
                         car.removeEffect(sectionEffects[i]);
                     }
 
-                    sectionEffects = TRACK_EFFECTS[car.getCurrentTrackIndex()];
+                    sectionEffects = raceTrack.getEffectsForSection(car.getCurrentTrackIndex());
                     for (int i = 0; i < sectionEffects.length; ++i) {
                         car.addEffect(sectionEffects[i]);
                     }

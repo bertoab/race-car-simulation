@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RaceTrack {
-    private double[] trackSections; // track section lengths
+    private final double[] trackSections; // track section lengths
+    private final StatusEffect[][] trackEffects;
     private final ArrayList<Car> cars; // cars in the race
 
     // constructor
-    public RaceTrack(double[] trackSections) {
+    public RaceTrack(double[] trackSections,  StatusEffect[][] trackEffects) {
         this.trackSections = trackSections;
+        this.trackEffects = trackEffects;
         this.cars = new ArrayList<>();
     }
 
@@ -20,9 +22,8 @@ public class RaceTrack {
         return trackSections;
     }
 
-    // sets track sections
-    public void setTrackSections(double[] trackSections) {
-        this.trackSections = trackSections;
+    public StatusEffect[] getEffectsForSection(int sectionIndex) {
+        return trackEffects[sectionIndex];
     }
 
     // gets cars
