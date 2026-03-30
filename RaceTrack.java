@@ -7,7 +7,7 @@ import java.util.Arrays;
 //This class stores the track sections and the cars racing on them so the program can manage the race
 public class RaceTrack {
     private final double[] trackSections; // track section lengths
-    private final StatusEffect[][] trackEffects;
+    private final StatusEffect[][] trackEffects; // array of StatusEffects to be applied at each corresponding track section
     private final ArrayList<Car> cars; // cars in the race
 
     // constructor

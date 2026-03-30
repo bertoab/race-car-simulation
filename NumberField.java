@@ -51,9 +51,11 @@ public class NumberField extends JTextField implements DocumentListener {
         return curValue;
     }
 
+    // Sets the current value and updates the text to match
     public void setCurValue(int curValue) {
         debounce = true;
         this.curValue = Math.clamp(curValue, minValue, maxValue);
+        // Updates the text to the canonical representation of curValue. This automatically removes leading 0s, -0, etc
         setText(Integer.toString(this.curValue));
         debounce = false;
     }
@@ -73,6 +75,7 @@ public class NumberField extends JTextField implements DocumentListener {
                 try {
                     setCurValue(Integer.parseInt(text));
                 } catch (NumberFormatException ignored) {
+                    // setCurValue also updates the text to match, so this has the effect of resetting the text field
                     setCurValue(curValue);
                 }
             }

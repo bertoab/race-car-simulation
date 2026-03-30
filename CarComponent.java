@@ -17,6 +17,7 @@ public class CarComponent extends JPanel {
 
     public CarComponent(Car car, Color color) {
         setOpaque(false);
+        // Extra width/height is needed to prevent name and status effect text from being clipped
         setSize(CIRCLE_SIZE + LABEL_SIZE, CIRCLE_SIZE + EXTRA_HEIGHT);
 
         this.car = car;
@@ -29,6 +30,7 @@ public class CarComponent extends JPanel {
     public void setLocation(Point position) {
         position = (Point) position.clone();
 
+        // Moves the location to the center of the circle, rather than the top-left
         position.x -= CIRCLE_SIZE / 2;
         position.y -= CIRCLE_SIZE / 2;
         super.setLocation(position);

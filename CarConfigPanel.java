@@ -12,16 +12,18 @@ public class CarConfigPanel extends JPanel implements ActionListener {
     private boolean readOnly = false;
 
     public CarConfigPanel(String defaultName) {
+        // styling and layout
         setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
         setLayout(new GridBagLayout());
 
+        // add labels and input fields
         JLabel carNameLabel = new JLabel("Car Name:");
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 1;
         c.anchor = GridBagConstraints.LINE_START;
         c.ipadx = 4;
-        c.weightx = 1.0;
+        c.weightx = 1.0; // ensures that excess horizontal space is placed between label and text fields
         add(carNameLabel, c);
         nameField = new JTextField(9);
         c = new GridBagConstraints();
@@ -34,6 +36,8 @@ public class CarConfigPanel extends JPanel implements ActionListener {
         c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 2;
+        c.ipadx = 4;
+        c.weightx = 1.0;
         c.anchor = GridBagConstraints.LINE_START;
         add(speedLabel, c);
 
@@ -46,6 +50,7 @@ public class CarConfigPanel extends JPanel implements ActionListener {
         c.anchor = GridBagConstraints.LINE_END;
         add(speedField, c);
 
+        // adds remove button to upper left corner
         removeButton = new JButton("X");
         c = new GridBagConstraints();
         c.gridx = 1;
@@ -55,6 +60,7 @@ public class CarConfigPanel extends JPanel implements ActionListener {
         removeButton.addActionListener(this);
         add(removeButton, c);
 
+        // sets default values for fields
         speedField.setCurValue(Utility.random.nextInt(20, (int) Car.MAX_SPEED + 1));
         nameField.setText(defaultName);
     }
@@ -85,6 +91,7 @@ public class CarConfigPanel extends JPanel implements ActionListener {
         }
     }
 
+    // Creates a new Car instance based on the fields of the ConfigPanel
     public Car makeCar(int startTrack, int totalTracks) {
         Car car = new Car(nameField.getText(), startTrack, Math.floorMod(startTrack - 1, totalTracks), totalTracks);
 

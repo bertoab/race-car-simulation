@@ -9,12 +9,15 @@ public class LeaderBoard extends JPanel {
     private static final String TITLE = "LeaderBoard\n";
     private final JTextArea placements;
     private String resultText;
-
     private int listNum;
 
     //CONSTRUCTORS
     public LeaderBoard() {
-        listNum = 0;
+        this(0);
+    }
+
+    public LeaderBoard(int listNum) {
+        this.listNum = listNum;
         resultText = TITLE;
         placements = new JTextArea();
         placements.setFocusable(false);
@@ -25,6 +28,7 @@ public class LeaderBoard extends JPanel {
         setSize(placements.getPreferredSize());
     }
 
+    //Display final time of each car in the LeaderBoard
     public void addCarEntry(Car car, double time) {
         listNum += 1;
 
@@ -35,6 +39,7 @@ public class LeaderBoard extends JPanel {
         revalidate();
     }
 
+    //Reset LeaderBoard whenever "Reset" or "Run Race" buttons are pressed
     public void resetLeaderBoard() {
         listNum = 0;
         resultText = TITLE;
@@ -43,6 +48,7 @@ public class LeaderBoard extends JPanel {
         revalidate();
     }
 
+    //GETTERS
     public String getLeaderBoardText() {
         return resultText;
     }

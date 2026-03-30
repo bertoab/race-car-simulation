@@ -1,10 +1,10 @@
 //Lior Sapir, Joshua Staub, Roberto Baez and Andrew Larrazabal
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import javax.swing.*;
 
 // Main container panel for the program. Configures all other components and updates them based on simulation state
 public class Menu extends JPanel implements ActionListener {
