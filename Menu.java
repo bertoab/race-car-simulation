@@ -22,6 +22,9 @@ public class Menu extends JPanel implements ActionListener {
     private final MapPanel mapPanel;
     private final RaceTrack raceTrack;
     private final LeaderBoard leaderBoard;
+    private final JButton addCarButton;
+    private final JButton runRaceButton;
+    private final JButton resetButton;
 
     private int carsFinished;
 
@@ -49,7 +52,7 @@ public class Menu extends JPanel implements ActionListener {
 
         //top pane
         JPanel top = new JPanel();
-        JButton addCarButton = new JButton("Add Car");
+        addCarButton = new JButton("Add Car");
         addCarButton.setActionCommand("add_car");
         addCarButton.addActionListener(this);
         top.add(addCarButton);
@@ -61,14 +64,15 @@ public class Menu extends JPanel implements ActionListener {
         //bottom pane
         JPanel bottom = new JPanel();
 
-        JButton runRaceButton = new JButton("Run Race");
+        runRaceButton = new JButton("Run Race");
         runRaceButton.setActionCommand("run_race");
         runRaceButton.addActionListener(this);
         bottom.add(runRaceButton);
 
-        JButton resetButton = new JButton("Reset");
+        resetButton = new JButton("Reset");
         resetButton.setActionCommand("reset");
         resetButton.addActionListener(this);
+        resetButton.setEnabled(false);
         bottom.add(resetButton);
 
         //car pane section
@@ -106,8 +110,7 @@ public class Menu extends JPanel implements ActionListener {
         }
     }
 
-    private void resetRace() {
-        isRaceRunning = false;
+    private void clearRaceData() {
         carsFinished = 0;
         raceTrack.clearCars();
         carComponents.clear();
@@ -116,16 +119,26 @@ public class Menu extends JPanel implements ActionListener {
                 mapPanel.remove(carComp);
             }
         }
+
         mapPanel.revalidate();
         mapPanel.repaint();
-        timer.stop();
         leaderBoard.resetLeaderBoard();
+    }
+
+    private void resetRace() {
+        clearRaceData();
+        isRaceRunning = false;
+        timer.stop();
 
         for (Component comp : carsPane.getComponents()) {
             if (comp instanceof CarConfigPanel configPanel) {
                 configPanel.setReadOnly(false);
             }
         }
+
+        resetButton.setEnabled(false);
+        runRaceButton.setEnabled(true);
+        addCarButton.setEnabled(true);
     }
 
     private void startRace() {
@@ -134,17 +147,7 @@ public class Menu extends JPanel implements ActionListener {
         }
 
         try {
-            carsFinished = 0;
-            raceTrack.clearCars();
-            carComponents.clear();
-            for (Component comp : mapPanel.getComponents()) {
-                if (comp instanceof CarComponent carComp) {
-                    mapPanel.remove(carComp);
-                }
-            }
-            mapPanel.revalidate();
-            mapPanel.repaint();
-            leaderBoard.resetLeaderBoard();
+            clearRaceData();
 
             totalTime = 0;
             int carIndex = 0;
@@ -183,6 +186,10 @@ public class Menu extends JPanel implements ActionListener {
             timer.start();
             leaderBoard.resetLeaderBoard(); //ANDREW: reset leaderboard when race starts
             lastTime = Utility.secondsElapsed();
+
+            addCarButton.setEnabled(false);
+            runRaceButton.setEnabled(false);
+            resetButton.setEnabled(true);
         } catch (RuntimeException exception) {
             resetRace();
 
