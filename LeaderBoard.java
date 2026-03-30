@@ -13,9 +13,7 @@ public class LeaderBoard extends JPanel {
 
     //CONSTRUCTORS
     public LeaderBoard() {
-        // setBorder(BorderFactory.createLineBorder(Color.BLACK));
         listNum = 0;
-        //cars = new Car[4];
         resultText = TITLE;
         placements = new JTextArea();
         placements.setFocusable(false);

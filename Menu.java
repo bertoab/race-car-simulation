@@ -261,12 +261,9 @@ public class Menu extends JPanel implements ActionListener {
         lastTime = curTime;
 
         if (carsFinished == raceTrack.getCars().size()) {
-            //TODO: add win screen
-
-            //FIXME: placeholder code
             timer.stop();
-            JOptionPane.showMessageDialog(null, "(Placeholder) Race finished!",
-                    "(Placeholder) Finished", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Race finished!",
+                    "Finished", JOptionPane.INFORMATION_MESSAGE);
         }
         
         totalTime += timeElapsed;
