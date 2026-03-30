@@ -35,6 +35,10 @@ public class Menu extends JPanel implements ActionListener {
     private double lastTime = 0;
     private double totalTime = 0; //ANDREW: added another attribute to calculate the time elapsed
 
+    public Menu() {
+        this(new MapPanel(), new RaceTrack());
+    }
+    
     public Menu(MapPanel mapPanel, RaceTrack raceTrack) {
         this.mapPanel = mapPanel;
         this.raceTrack = raceTrack;
