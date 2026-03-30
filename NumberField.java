@@ -16,9 +16,7 @@ public class NumberField extends JTextField implements DocumentListener {
     public NumberField(int curValue, int minValue, int maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
-        this.curValue = curValue;
-
-        this.setText(Integer.toString(curValue));
+        setCurValue(curValue);
 
         this.getDocument().addDocumentListener(this);
     }

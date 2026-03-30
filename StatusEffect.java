@@ -11,13 +11,13 @@ public enum StatusEffect {
     TIRE_POPPED("Tire Popped", 0.6, 0.015, 0); //chance dependent status effect that lasts until race end
 
     public final String name;
-    public final double multiplier;
+    public final double speedMultiplier;
     public final double startChancePerSec;
     public final double endChancePerSec;
 
-    StatusEffect(String name, double multiplier, double startChancePerSec, double endChancePerSec) {
+    StatusEffect(String name, double speedMultiplier, double startChancePerSec, double endChancePerSec) {
         this.name = name;
-        this.multiplier = multiplier;
+        this.speedMultiplier = speedMultiplier;
         this.startChancePerSec = startChancePerSec;
         this.endChancePerSec = endChancePerSec;
     }

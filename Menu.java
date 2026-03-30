@@ -234,12 +234,11 @@ public class Menu extends JPanel implements ActionListener {
                 Iterator<StatusEffect> effectIterator = car.getStatusEffects().iterator();
 
                 while (effectIterator.hasNext()) {
-                    deltaDist *= effectIterator.next().multiplier;
+                    deltaDist *= effectIterator.next().speedMultiplier;
                 }
 
                 //apply position change
                 double totalTrackDist = raceTrack.getTrackSections()[curTrack];
-                //FIXME: if this is more than 1, the car will move onto the next track with a speed proportional to the current track
                 double newPosition = car.getPosition() + (deltaDist / totalTrackDist);
                 car.setPosition(newPosition);
 
