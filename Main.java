@@ -1,7 +1,6 @@
 //Lior Sapir, Roberto Baez, Joshua Staub
 
 import java.awt.*;
-import java.io.File;
 import javax.swing.*;
 
 // Entry point for the program, initializes Swing window and loads data for RaceTrack
