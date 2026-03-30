@@ -11,6 +11,11 @@ public class CarConfigPanel extends JPanel implements ActionListener {
     private final JButton removeButton;
     private boolean readOnly = false;
 
+
+    public CarConfigPanel() {
+        this("Car");
+    }
+
     public CarConfigPanel(String defaultName) {
         // styling and layout
         setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));

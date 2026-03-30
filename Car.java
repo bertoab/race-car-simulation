@@ -14,6 +14,10 @@ public class Car {
     private double positionInTrackSection;
     private final Set<StatusEffect> statusEffects;
 
+    public Car() {
+        this("Car", 0, 1, 1);
+    }
+
     public Car(String name, int startTrackIndex, int goalTrackIndex, int totalTracks) {
         this.name = name;
         this.currentTrackIndex = startTrackIndex;

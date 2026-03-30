@@ -47,7 +47,7 @@ public class MapPanel extends JPanel {
 
     @Override
     public String toString() {
-        return "MapPanel";
+        return "MapPanel[number of locations: " + xRatios.length + "]";
     }
 
     @Override

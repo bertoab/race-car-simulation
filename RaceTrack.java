@@ -9,7 +9,11 @@ public class RaceTrack {
     private final StatusEffect[][] trackEffects; // array of StatusEffects to be applied at each corresponding track section
     private final ArrayList<Car> cars; // cars in the race
 
-    // constructor
+
+    // constructors
+    public RaceTrack() {
+        this(new double[] {}, new StatusEffect[][] {});
+    }
     public RaceTrack(double[] trackSections,  StatusEffect[][] trackEffects) {
         this.trackSections = trackSections;
         this.trackEffects = trackEffects;
@@ -36,5 +40,25 @@ public class RaceTrack {
 
     public void clearCars() {
         cars.clear();
+    }
+
+    @Override
+    public String toString() {
+        return "RaceTrack[number of track sections: " + trackSections.length + "]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof RaceTrack)) {
+            return false;
+        }
+
+        RaceTrack otherCar = (RaceTrack)obj;
+
+        if (otherCar.trackSections.length == trackSections.length) {
+            return true;
+        }
+
+        return false;
     }
 }
