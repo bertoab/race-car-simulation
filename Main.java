@@ -6,7 +6,7 @@ import java.io.File;
 
 public class Main {
     private static final String WINDOW_TITLE = "Race Car Simulation";
-    private static final Dimension WINDOW_DIMENSION = new Dimension(700, 500);
+    private static final Dimension WINDOW_DIMENSION = new Dimension(800, 486);
 
     public static void main(String[] args) {
         JFrame frame = new JFrame(WINDOW_TITLE);

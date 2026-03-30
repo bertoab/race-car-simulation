@@ -29,7 +29,7 @@ public class Menu extends JPanel implements ActionListener {
     private final RaceTrack raceTrack;
     private final LeaderBoard leaderBoard;
 
-    private ArrayList<Car> finishOrder; //list of the cars in the order they finished
+    private int carsFinished;
 
     private final ArrayList<CarComponent> carComponents;
     private boolean isRaceRunning = false;
@@ -43,7 +43,6 @@ public class Menu extends JPanel implements ActionListener {
 
     public Menu(MapPanel mapPanel) {
         rand = new Random();
-        finishOrder = new ArrayList<Car>();
 
         this.mapPanel = mapPanel;
         // FIXME: idk if this is the best place to hardcode it or if it should be hardcoded at all but I added the right lengths for now
@@ -52,7 +51,6 @@ public class Menu extends JPanel implements ActionListener {
             162.0, 115.0, 105.0, 83.0, 55.0,
             },
             null);
-        // TODO: add leaderboard component to view when complete
         this.leaderBoard = new LeaderBoard();
         this.carComponents = new ArrayList<CarComponent>();
 
@@ -71,9 +69,9 @@ public class Menu extends JPanel implements ActionListener {
         addCarButton.addActionListener(this);
         top.add(addCarButton);
 
-        //FIXME: add leaderboard to top panel (ANDREW)
-        //ANDREW: added LeaderBoard to top panel
-        top.add(leaderBoard);
+        //ANDREW: added LeaderBoard
+        leaderBoard.setLocation(10, 10);
+        mapPanel.add(leaderBoard);
 
         //bottom pane
         JPanel bottom = new JPanel();
@@ -100,8 +98,6 @@ public class Menu extends JPanel implements ActionListener {
         for (int i = 0; i < INITIAL_NUM_CARS; i++) {
             addConfigPanel();
         }
-
-        
     }
 
     private void addConfigPanel() {
@@ -111,7 +107,7 @@ public class Menu extends JPanel implements ActionListener {
 
         try {
             int carCount = carsPane.getComponentCount() + 1;
-            if (carCount >= raceTrack.getTrackSections().length) {
+            if (carCount > raceTrack.getTrackSections().length) {
                 String message = String.format("Cannot add more than %d cars.\n", raceTrack.getTrackSections().length);
                 throw new IllegalStateException(message);
             }
@@ -127,12 +123,18 @@ public class Menu extends JPanel implements ActionListener {
 
     private void resetRace() {
         isRaceRunning = false;
-        finishOrder.clear();
+        carsFinished = 0;
         raceTrack.clearCars();
         carComponents.clear();
-        mapPanel.removeAll();
+        for (Component comp : mapPanel.getComponents()) {
+            if (comp instanceof CarComponent carComp) {
+                mapPanel.remove(carComp);
+            }
+        }
+        mapPanel.revalidate();
         mapPanel.repaint();
         timer.stop();
+        leaderBoard.resetLeaderBoard();
 
         for (Component comp : carsPane.getComponents()) {
             if (comp instanceof CarConfigPanel configPanel) {
@@ -147,10 +149,17 @@ public class Menu extends JPanel implements ActionListener {
         }
 
         try {
-            finishOrder.clear();
+            carsFinished = 0;
             raceTrack.clearCars();
             carComponents.clear();
-            mapPanel.removeAll();
+            for (Component comp : mapPanel.getComponents()) {
+                if (comp instanceof CarComponent carComp) {
+                    mapPanel.remove(carComp);
+                }
+            }
+            mapPanel.revalidate();
+            mapPanel.repaint();
+            leaderBoard.resetLeaderBoard();
 
             totalTime = 0;
             int carIndex = 0;
@@ -234,7 +243,6 @@ public class Menu extends JPanel implements ActionListener {
 
                 //apply position change
                 double totalTrackDist = raceTrack.getTrackSections()[curTrack];
-
                 //FIXME: if this is more than 1, the car will move onto the next track with a speed proportional to the current track
                 double newPosition = car.getPosition() + (deltaDist / totalTrackDist);
                 car.setPosition(newPosition);
@@ -251,24 +259,26 @@ public class Menu extends JPanel implements ActionListener {
                     }
 
                     if (car.hasFinished()) {
-                        finishOrder.add(car);
+                        carsFinished += 1;
+                        leaderBoard.addCarEntry(car, totalTime);
                     }
                 }
             }
         }
         lastTime = curTime;
 
-        if (finishOrder.size() == raceTrack.getCars().size()) {
+        if (carsFinished == raceTrack.getCars().size()) {
             //TODO: add win screen
 
-            //FIXME: placeholder code (especially the finishOrder.add() statement)
-            finishOrder.add(new Car("", 0, 0, 0));
+            //FIXME: placeholder code
+            timer.stop();
             JOptionPane.showMessageDialog(null, "(Placeholder) Race finished!",
                     "(Placeholder) Finished", JOptionPane.INFORMATION_MESSAGE);
         }
         
         totalTime += timeElapsed;
-        leaderBoard.calculateCarOrder(raceTrack.getCars(), totalTime);
+        //FIXME:
+        // leaderBoard.calculateCarOrder(raceTrack.getCars(), totalTime);
 
         redrawRace();
     }
