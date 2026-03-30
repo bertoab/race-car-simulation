@@ -65,4 +65,23 @@ public class CarComponent extends JPanel {
         }
     }
 
+    @Override
+    public String toString() {
+        return "CarComponent[name:" + name +"]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CarComponent)) {
+            return false;
+        }
+
+        CarComponent otherCar = (CarComponent)obj;
+
+        if (otherCar.name.equals(name)) {
+            return true;
+        }
+
+        return false;
+    }
 }

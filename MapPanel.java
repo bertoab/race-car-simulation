@@ -36,4 +36,18 @@ public class MapPanel extends JPanel {
         //draw the image to match the size of the map panel
         g.drawImage(mapImage.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH), 0, 0, null);
     }
+
+    @Override
+    public String toString() {
+        return "MapPanel";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof MapPanel)) {
+            return false;
+        }
+
+        return true;
+    }
 }
