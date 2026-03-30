@@ -17,7 +17,7 @@ public class LeaderBoard extends JPanel {
     }
 
     public LeaderBoard(int listNum) {
-        listNum = 0;
+        this.listNum = listNum;
         resultText = TITLE;
         placements = new JTextArea();
         placements.setFocusable(false);
