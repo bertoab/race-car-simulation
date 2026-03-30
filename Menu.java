@@ -213,16 +213,16 @@ public class Menu extends JPanel implements ActionListener {
                 StatusEffect[] sectionEffects = TRACK_EFFECTS[curTrack];
 
                 //roll to apply chance effects
-                if (!(car.getStatusEffects().contains(StatusEffect.MUDDIED)) && rand.nextInt(500) == 0) {
-                    car.addEffect(StatusEffect.MUDDIED);
-                }
+                for (StatusEffect effect : StatusEffect.values()) {
+                    // this is not mathematically accurate to how probability actually works, but it's good enough
+                    double startProb = effect.startChancePerSec * timeElapsed;
+                    double endProb = effect.endChancePerSec * timeElapsed;
 
-                if ((car.getStatusEffects().contains(StatusEffect.MUDDIED)) && rand.nextInt(100) == 0) {
-                    car.removeEffect(StatusEffect.MUDDIED);
-                }
-
-                if (!(car.getStatusEffects().contains(StatusEffect.TIRE_POPPED)) && rand.nextInt(2000) == 0) {
-                    car.addEffect(StatusEffect.TIRE_POPPED);
+                    if (!car.hasEffect(effect) && rand.nextDouble() < startProb) {
+                        car.addEffect(effect);
+                    } else if (car.hasEffect(effect) && rand.nextDouble() < endProb) {
+                        car.removeEffect(effect);
+                    }
                 }
 
                 //apply car status effects
@@ -252,6 +252,7 @@ public class Menu extends JPanel implements ActionListener {
 
                     if (car.hasFinished()) {
                         finishOrder.add(car);
+                        car.clearEffects();
                     }
                 }
             }
