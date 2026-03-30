@@ -48,6 +48,7 @@ public class Car {
         return positionInTrackSection;
     }
 
+    // Updates position in track, and also moves to the next track if position >= 1
     public void setPosition(double position) {
         if (position < 0.0) {
             return;

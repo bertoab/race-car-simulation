@@ -22,6 +22,7 @@ public enum StatusEffect {
         this.endChancePerSec = endChancePerSec;
     }
 
+    @Override
     public String toString() {
         return name;
     }
