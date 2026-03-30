@@ -43,7 +43,6 @@ public class LeaderBoard extends JPanel {
     public void addCarEntry(Car car, double time) {
         listNum += 1;
 
-        System.out.println("prev: " + (placements.getSize().width + 10) + ", " + (placements.getSize().height + 10));
         resultText += listNum + ". " + car.getName() + " - " + String.format("%.2f seconds\n", time);
         placements.setText(resultText);
 
