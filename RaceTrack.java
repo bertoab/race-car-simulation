@@ -2,7 +2,6 @@
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
 
 //This class stores the track sections and the cars racing on them so the program can manage the race
 public class RaceTrack {

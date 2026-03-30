@@ -15,6 +15,11 @@ public class CarComponent extends JPanel {
 
     private Color color;
 
+
+    public CarComponent() {
+        this (new Car(), Color.RED);
+    }
+
     public CarComponent(Car car, Color color) {
         setOpaque(false);
         // Extra width/height is needed to prevent name and status effect text from being clipped
