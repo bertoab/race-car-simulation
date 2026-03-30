@@ -35,6 +35,7 @@ public class Menu extends JPanel implements ActionListener {
     private boolean isRaceRunning = false;
     private final Timer timer;
     private double lastTime = 0;
+    private double totalTime = 0; //ANDREW: added another attribute to calculate the time elapsed
 
     public Menu() {
         this(null);
@@ -70,6 +71,10 @@ public class Menu extends JPanel implements ActionListener {
         addCarButton.addActionListener(this);
         top.add(addCarButton);
 
+        //FIXME: add leaderboard to top panel (ANDREW)
+        //ANDREW: added LeaderBoard to top panel
+        top.add(leaderBoard);
+
         //bottom pane
         JPanel bottom = new JPanel();
 
@@ -95,6 +100,8 @@ public class Menu extends JPanel implements ActionListener {
         for (int i = 0; i < INITIAL_NUM_CARS; i++) {
             addConfigPanel();
         }
+
+        
     }
 
     private void addConfigPanel() {
@@ -145,6 +152,7 @@ public class Menu extends JPanel implements ActionListener {
             carComponents.clear();
             mapPanel.removeAll();
 
+            totalTime = 0;
             int carIndex = 0;
             for (Component comp : carsPane.getComponents()) {
                 if (comp instanceof CarConfigPanel configPanel) {
@@ -179,6 +187,7 @@ public class Menu extends JPanel implements ActionListener {
             redrawRace();
             isRaceRunning = true;
             timer.start();
+            leaderBoard.resetLeaderBoard(); //ANDREW: reset leaderboard when race starts
             lastTime = Utility.secondsElapsed();
         } catch (RuntimeException exception) {
             resetRace();
@@ -257,8 +266,9 @@ public class Menu extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(null, "(Placeholder) Race finished!",
                     "(Placeholder) Finished", JOptionPane.INFORMATION_MESSAGE);
         }
-
-        leaderBoard.calculateCarOrder(raceTrack.getCars());
+        
+        totalTime += timeElapsed;
+        leaderBoard.calculateCarOrder(raceTrack.getCars(), totalTime);
 
         redrawRace();
     }

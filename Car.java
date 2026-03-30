@@ -1,4 +1,4 @@
-// Joshua Staub
+// Joshua Staub, Andrew Larrazabal
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -11,6 +11,7 @@ public class Car {
     private final int goalTrackIndex;
     private final int totalTracks;
     private double positionInTrackSection;
+    private boolean finished_flag; //ANDREW: added flag for leaderboard
     private final Set<StatusEffect> statusEffects;
 
     public Car(String name, int startTrackIndex, int goalTrackIndex, int totalTracks) {
@@ -19,6 +20,7 @@ public class Car {
         this.goalTrackIndex = goalTrackIndex;
         this.totalTracks = totalTracks;
         speed = 0;
+        finished_flag = false;
         positionInTrackSection = 0;
         statusEffects = new HashSet<>();
     }
@@ -80,10 +82,23 @@ public class Car {
         return currentTrackIndex;
     }
 
+    //ANDREW: added a getter for the goal track index
+    public int getGoalTrackIndex() {
+        return goalTrackIndex;
+    }
+
     public boolean hasFinished() {
         return goalTrackIndex == currentTrackIndex;
     }
 
+    //ANDREW: added a getter and setter for the flag that a car needs to finish the race
+    public boolean getFinishedFlag() {
+        return finished_flag;
+    }
+
+    public void setFinishedFlag(boolean flag) {
+        finished_flag = flag;
+    }
     public Set<StatusEffect> getStatusEffects() {
         return Collections.unmodifiableSet(statusEffects);
     }
