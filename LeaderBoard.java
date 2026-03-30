@@ -3,6 +3,7 @@
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+//Displays the ranking of each Car in the race
 public class LeaderBoard extends JPanel {
     //ATTRIBUTES
     private static final String TITLE = "LeaderBoard\n";

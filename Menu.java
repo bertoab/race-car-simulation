@@ -5,38 +5,37 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
+// Main container panel for the program. Configures all other components and updates them based on simulation state
 public class Menu extends JPanel implements ActionListener {
+    // Constants
     private static final int INITIAL_NUM_CARS = 6;
     private static final double STEP_TIME = 1.0 / 30.0;
-
     private static final Color[] POSSIBLE_COLORS = {
         Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.PINK,
         Color.BLACK, Color.ORANGE, Color.WHITE, Color.GRAY, Color.CYAN
     };
 
-    private final Random rand;
-
+    // Components
     private final Box carsPane;
     private final MapPanel mapPanel;
-    private final RaceTrack raceTrack;
     private final LeaderBoard leaderBoard;
     private final JButton addCarButton;
     private final JButton runRaceButton;
     private final JButton resetButton;
-
-    private int carsFinished;
-
     private final ArrayList<CarComponent> carComponents;
+
+    // State
+    private final RaceTrack raceTrack;
+    private int carsFinished;
     private boolean isRaceRunning = false;
+
+    // Timing
     private final Timer timer;
     private double lastTime = 0;
     private double totalTime = 0; //ANDREW: added another attribute to calculate the time elapsed
 
     public Menu(MapPanel mapPanel, RaceTrack raceTrack) {
-        rand = new Random();
-
         this.mapPanel = mapPanel;
         this.raceTrack = raceTrack;
         this.leaderBoard = new LeaderBoard();
@@ -89,6 +88,7 @@ public class Menu extends JPanel implements ActionListener {
         }
     }
 
+    // Add a config panel for a new car
     private void addConfigPanel() {
         if (isRaceRunning) {
             return;
@@ -110,6 +110,7 @@ public class Menu extends JPanel implements ActionListener {
         }
     }
 
+    // Clears all simulation state and CarComponents
     private void clearRaceData() {
         carsFinished = 0;
         raceTrack.clearCars();
@@ -125,6 +126,7 @@ public class Menu extends JPanel implements ActionListener {
         leaderBoard.resetLeaderBoard();
     }
 
+    // Stops the current race and re-enables configuration
     private void resetRace() {
         clearRaceData();
         isRaceRunning = false;
@@ -141,6 +143,7 @@ public class Menu extends JPanel implements ActionListener {
         addCarButton.setEnabled(true);
     }
 
+    // Starts a new race
     private void startRace() {
         if (isRaceRunning) {
             return;
@@ -198,6 +201,7 @@ public class Menu extends JPanel implements ActionListener {
         }
     }
 
+    // Updates the race simulation
     private void stepRace() {
         double curTime = Utility.secondsElapsed();
         double timeElapsed = curTime - lastTime;
@@ -219,9 +223,9 @@ public class Menu extends JPanel implements ActionListener {
                     double startProb = effect.startChancePerSec * timeElapsed;
                     double endProb = effect.endChancePerSec * timeElapsed;
 
-                    if (!car.hasEffect(effect) && rand.nextDouble() < startProb) {
+                    if (!car.hasEffect(effect) && Utility.random.nextDouble() < startProb) {
                         car.addEffect(effect);
-                    } else if (car.hasEffect(effect) && rand.nextDouble() < endProb) {
+                    } else if (car.hasEffect(effect) && Utility.random.nextDouble() < endProb) {
                         car.removeEffect(effect);
                     }
                 }
@@ -271,6 +275,7 @@ public class Menu extends JPanel implements ActionListener {
         redrawRace();
     }
 
+    // Repositions and repaints all CarComponents
     private void redrawRace() {
         for (CarComponent carComponent : carComponents) {
             Car car = carComponent.getCar();

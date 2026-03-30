@@ -1,6 +1,7 @@
 //Joshua Staub
 
 import java.awt.*;
+import java.util.Random;
 
 // Contains common utility functions that do not belong to any particular class
 public class Utility {
@@ -8,6 +9,7 @@ public class Utility {
         return (int) Math.floor(num);
     }
 
+    // Performs linear interpolation between two points
     public static Point lerp(Point p1, Point p2, double t) {
         return new Point(floorInt(p1.x + t * (p2.x - p1.x)), floorInt(p1.y + t * (p2.y - p1.y)));
     }
@@ -17,4 +19,5 @@ public class Utility {
     }
 
     private static final long NANOS_TO_S = 1_000_000_000;
+    public static final Random random = new Random();
 }

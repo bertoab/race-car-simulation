@@ -3,8 +3,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Random;
 
+// CarConfigPanel displays the input fields that allow a user to configure the parameters of a Car before each race
 public class CarConfigPanel extends JPanel implements ActionListener {
     private final JTextField nameField;
     private final NumberField speedField;
@@ -55,8 +55,7 @@ public class CarConfigPanel extends JPanel implements ActionListener {
         removeButton.addActionListener(this);
         add(removeButton, c);
 
-        Random rand = new Random();
-        speedField.setCurValue(rand.nextInt(20, (int) Car.MAX_SPEED + 1));
+        speedField.setCurValue(Utility.random.nextInt(20, (int) Car.MAX_SPEED + 1));
         nameField.setText(defaultName);
     }
 

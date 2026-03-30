@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
+// Entry point for the program, initializes Swing window and loads data for RaceTrack
 public class Main {
     private static final String WINDOW_TITLE = "Race Car Simulation";
     private static final Dimension WINDOW_DIMENSION = new Dimension(800, 486);

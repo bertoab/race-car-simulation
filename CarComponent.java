@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
 
+// Each CarComponent is responsible for drawing its corresponding Car and its status effects
 public class CarComponent extends JPanel {
     private final Car car;
 

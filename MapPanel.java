@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 
+// The MapPanel is responsible for drawing the map, and for converting between track indices and pixel positions on the screen.
 public class MapPanel extends JPanel {
     private Image mapImage;
     private final double[] xRatios;
@@ -20,8 +21,7 @@ public class MapPanel extends JPanel {
         //convert the map image file to an Image object
         try {
             mapImage = ImageIO.read(f);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
