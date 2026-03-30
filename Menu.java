@@ -1,4 +1,4 @@
-//Lior Sapir
+//Lior Sapir, Joshua Staub, Roberto Baez and Andrew Larrazabal
 
 import javax.swing.*;
 import java.awt.*;
@@ -263,8 +263,6 @@ public class Menu extends JPanel implements ActionListener {
         }
         
         totalTime += timeElapsed;
-        //FIXME:
-        // leaderBoard.calculateCarOrder(raceTrack.getCars(), totalTime);
 
         redrawRace();
     }

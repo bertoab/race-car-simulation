@@ -1,5 +1,8 @@
+//Joshua Staub
+
 import java.awt.*;
 
+// Contains common utility functions that do not belong to any particular class
 public class Utility {
     public static int floorInt(double num) {
         return (int) Math.floor(num);

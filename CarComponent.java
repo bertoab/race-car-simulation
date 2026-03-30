@@ -1,11 +1,11 @@
-//Lior Sapir
+//Lior Sapir, Joshua Staub
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
 
 public class CarComponent extends JPanel {
-    private Car car;
+    private final Car car;
 
     private final String name;
     private static final int CIRCLE_SIZE = 20;
@@ -49,7 +49,6 @@ public class CarComponent extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        //FIXME: placeholder
         g.setColor(color);
         g.fillOval(0, 0, CIRCLE_SIZE, CIRCLE_SIZE);
         g.setColor(Color.BLACK);

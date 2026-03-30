@@ -1,4 +1,4 @@
-//Lior Sapir
+//Lior Sapir, Roberto Baez, Joshua Staub
 
 import javax.swing.*;
 import java.awt.*;

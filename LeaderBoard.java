@@ -1,13 +1,12 @@
 //Andrew Larrazabal
 
-import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 public class LeaderBoard extends JPanel {
     //ATTRIBUTES
     private static final String TITLE = "LeaderBoard\n";
-    private JTextArea placements;
+    private final JTextArea placements;
     private String resultText;
 
     private int listNum;
@@ -26,19 +25,6 @@ public class LeaderBoard extends JPanel {
         setBackground(placements.getBackground());
         setSize(placements.getPreferredSize());
     }
-
-    //FIXME:
-    //METHODS
-    // public void calculateCarOrder(List<Car> cars, double time) {
-        
-    //     for (int i = 0; i < cars.size(); i++) {
-    //         if (cars.get(i).hasFinished() && !cars.get(i).getFinishedFlag()) {
-    //             cars.get(i).setFinishedFlag(true);
-    //             resultText += cars.get(i).getName() + " Time: " + String.format("%.2f seconds\n", time);
-    //             placements.setText(resultText);
-    //         }
-    //     }
-    // }
 
     public void addCarEntry(Car car, double time) {
         listNum += 1;

@@ -1,5 +1,6 @@
 // Joshua Staub and Lior Sapir
 
+// Represents possible status effects that can be applied to a car during a race.
 public enum StatusEffect {
     CONCRETE("Concrete", 1.5, 0, 0), //track dependent status effect
     SNOW("Snow", 0.6, 0, 0), //track dependent status effect
@@ -19,5 +20,9 @@ public enum StatusEffect {
         this.multiplier = multiplier;
         this.startChancePerSec = startChancePerSec;
         this.endChancePerSec = endChancePerSec;
+    }
+
+    public String toString() {
+        return name;
     }
 }
